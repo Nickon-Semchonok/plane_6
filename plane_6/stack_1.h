@@ -5,9 +5,9 @@
 template<typename T>
 class Stack {
 private:
-	T* data;          
-	size_t capacity; 
-	size_t size;      
+	T* data;
+	size_t capacity;
+	size_t size;
 
 	void resize(size_t new_capacity) {
 		T* new_data = new T[new_capacity];

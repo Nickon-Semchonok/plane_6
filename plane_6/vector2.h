@@ -14,40 +14,40 @@ public:
 	vector2_t() {
 		x = 0;
 		y = 0;
-		name = nullptr;
+		name = NULL;
 	}
 
 	vector2_t(T x) {
 		this->x = x;
 		this->y = 0;
-		name = nullptr;
+		name = NULL;
 	}
 
 	vector2_t(T x, T y) : x{ x }, y{ y } {
-		name = nullptr;
+		name = NULL;
 	}
 
 	vector2_t(T x, T y, char* name) : x{ x }, y{ y } {
-		if (name != nullptr) {
+		if (name != NULL) {
 			size_t len = strlen(name) + 1;
 			this->name = new char[len];
 			strcpy_s(this->name, len, name);
 		}
 		else {
-			this->name = nullptr;
+			this->name = NULL;
 		}
 	}
 
 	vector2_t(const vector2_t& other) {
 		this->x = other.x;
 		this->y = other.y;
-		if (other.name != nullptr) {
+		if (other.name != NULL) {
 			size_t len = strlen(other.name) + 1;
 			this->name = new char[len];
 			strcpy_s(this->name, len, other.name);
 		}
 		else {
-			this->name = nullptr;
+			this->name = NULL;
 		}
 	}
 
@@ -55,13 +55,13 @@ public:
 		this->x = other.x;
 		this->y = other.y;
 		this->name = other.name;
-		other.name = nullptr;
+		other.name = NULL;
 	}
 
 	~vector2_t() {
-		if (name != nullptr) {
+		if (name != NULL) {
 			delete[] name;
-			name = nullptr;
+			name = NULL;
 		}
 	}
 
@@ -72,11 +72,11 @@ public:
 
 	char* get_name() const { return name; }
 	void set_name(char* name) {
-		if (this->name != nullptr) {
+		if (this->name != NULL) {
 			delete[] this->name;
-			this->name = nullptr;
+			this->name = NULL;
 		}
-		if (name != nullptr) {
+		if (name != NULL) {
 			size_t len = strlen(name) + 1;
 			this->name = new char[len];
 			strcpy_s(this->name, len, name);
@@ -84,15 +84,15 @@ public:
 	}
 
 	std::string to_string() const {
-		if (name != nullptr) {
+		if (name != NULL) {
 			return std::format("{0}({1}; {2})", name, x, y);
 		}
 		return std::format("({0}; {1})", x, y);
 	}
 
 	vector2_t operator +(const vector2_t& other) const {
-		char* new_name = nullptr;
-		if (this->name != nullptr && other.name != nullptr) {
+		char* new_name = NULL;
+		if (this->name != NULL && other.name != NULL) {
 			size_t len1 = strlen(this->name);
 			size_t len = len1 + strlen(other.name) + 2;
 			new_name = new char[len];
@@ -104,8 +104,8 @@ public:
 	}
 
 	vector2_t operator -(const vector2_t& other) const {
-		char* new_name = nullptr;
-		if (this->name != nullptr && other.name != nullptr) {
+		char* new_name = NULL;
+		if (this->name != NULL && other.name != NULL) {
 			size_t len1 = strlen(this->name);
 			size_t len = len1 + strlen(other.name) + 2;
 			new_name = new char[len];
@@ -120,17 +120,17 @@ public:
 		if (this == &other) return *this;
 		this->x = other.x;
 		this->y = other.y;
-		if (this->name != nullptr) {
+		if (this->name != NULL) {
 			delete[] this->name;
-			this->name = nullptr;
+			this->name = NULL;
 		}
-		if (other.name != nullptr) {
+		if (other.name != NULL) {
 			size_t len = strlen(other.name) + 1;
 			this->name = new char[len];
 			strcpy_s(this->name, len, other.name);
 		}
 		else {
-			this->name = nullptr;
+			this->name = NULL;
 		}
 		return *this;
 	}
@@ -139,11 +139,11 @@ public:
 		if (this == &other) return *this;
 		this->x = other.x;
 		this->y = other.y;
-		if (this->name != nullptr) {
+		if (this->name != NULL) {
 			delete[] this->name;
 		}
 		this->name = other.name;
-		other.name = nullptr;
+		other.name = NULL;
 		return *this;
 	}
 

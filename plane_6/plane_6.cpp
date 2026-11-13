@@ -1,23 +1,23 @@
 ﻿#include <iostream>
+#include <memory>
 #include "vector2.h"
 #include "stack_1.h"
 
 int main() {
-	Stack<vector2_t<int>> vector_stack;
+	std::unique_ptr<Stack<vector2_t<int>>> vector_stack = std::make_unique<Stack<vector2_t<int>>>();
 
-	vector_stack.push(vector2_t<int>(10, 20, (char*)"VectorA"));
-	vector_stack.push(vector2_t<int>(30, 40, (char*)"VectorB"));
+	vector_stack->push(vector2_t<int>(10, 20, (char*)"VectorA"));
+	vector_stack->push(vector2_t<int>(30, 40, (char*)"VectorB"));
+	vector_stack->push(vector2_t<int>(50, 60, (char*)"VectorC"));
 
-	std::cout << "Stack size: " << vector_stack.get_size() << std::endl;
+	std::cout << "Stack size: " << vector_stack->get_size() << std::endl;
 
-	std::cout << "Top element (peek): " << vector_stack.peek() << std::endl;
-
-	Stack<vector2_t<int>> stack_copy = vector_stack;
-	std::cout << "Copied stack top: " << stack_copy.peek() << std::endl;
-
-	vector_stack.pop();
-	std::cout << "After pop, new top of original stack: " << vector_stack.peek() << std::endl;
-	std::cout << "Copied stack top remains unchanged: " << stack_copy.peek() << std::endl;
+	Stack<vector2_t<int>> temp_stack = *vector_stack;
+	std::cout << "\nElements in collection (Stack):\n";
+	while (!temp_stack.is_empty()) {
+		std::cout << temp_stack.peek() << std::endl;
+		temp_stack.pop();
+	}
 
 	return 0;
 }
