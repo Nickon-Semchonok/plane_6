@@ -1,0 +1,195 @@
+#pragma once
+#include <string>
+#include <iostream>
+#include <format>
+#include <cstring>
+
+template<typename T>
+class vector2_t {
+private:
+	T x;
+	T y;
+	char* name;
+public:
+	vector2_t() {
+		x = 0;
+		y = 0;
+		name = nullptr;
+	}
+
+	vector2_t(T x) {
+		this->x = x;
+		this->y = 0;
+		name = nullptr;
+	}
+
+	vector2_t(T x, T y) : x{ x }, y{ y } {
+		name = nullptr;
+	}
+
+	vector2_t(T x, T y, char* name) : x{ x }, y{ y } {
+		if (name != nullptr) {
+			size_t len = strlen(name) + 1;
+			this->name = new char[len];
+			strcpy_s(this->name, len, name);
+		}
+		else {
+			this->name = nullptr;
+		}
+	}
+
+	vector2_t(const vector2_t& other) {
+		this->x = other.x;
+		this->y = other.y;
+		if (other.name != nullptr) {
+			size_t len = strlen(other.name) + 1;
+			this->name = new char[len];
+			strcpy_s(this->name, len, other.name);
+		}
+		else {
+			this->name = nullptr;
+		}
+	}
+
+	vector2_t(vector2_t&& other) noexcept {
+		this->x = other.x;
+		this->y = other.y;
+		this->name = other.name;
+		other.name = nullptr;
+	}
+
+	~vector2_t() {
+		if (name != nullptr) {
+			delete[] name;
+			name = nullptr;
+		}
+	}
+
+	T get_x() const { return x; }
+	T get_y() const { return y; }
+	void set_x(T x) { this->x = x; }
+	void set_y(T y) { this->y = y; }
+
+	char* get_name() const { return name; }
+	void set_name(char* name) {
+		if (this->name != nullptr) {
+			delete[] this->name;
+			this->name = nullptr;
+		}
+		if (name != nullptr) {
+			size_t len = strlen(name) + 1;
+			this->name = new char[len];
+			strcpy_s(this->name, len, name);
+		}
+	}
+
+	std::string to_string() const {
+		if (name != nullptr) {
+			return std::format("{0}({1}; {2})", name, x, y);
+		}
+		return std::format("({0}; {1})", x, y);
+	}
+
+	vector2_t operator +(const vector2_t& other) const {
+		char* new_name = nullptr;
+		if (this->name != nullptr && other.name != nullptr) {
+			size_t len1 = strlen(this->name);
+			size_t len = len1 + strlen(other.name) + 2;
+			new_name = new char[len];
+			strcpy_s(new_name, len, this->name);
+			strcat_s(new_name, len, "+");
+			strcat_s(new_name, len, other.name);
+		}
+		return vector2_t(this->x + other.x, this->y + other.y, new_name);
+	}
+
+	vector2_t operator -(const vector2_t& other) const {
+		char* new_name = nullptr;
+		if (this->name != nullptr && other.name != nullptr) {
+			size_t len1 = strlen(this->name);
+			size_t len = len1 + strlen(other.name) + 2;
+			new_name = new char[len];
+			strcpy_s(new_name, len, this->name);
+			strcat_s(new_name, len, "-");
+			strcat_s(new_name, len, other.name);
+		}
+		return vector2_t(this->x - other.x, this->y - other.y, new_name);
+	}
+
+	vector2_t& operator =(const vector2_t& other) {
+		if (this == &other) return *this;
+		this->x = other.x;
+		this->y = other.y;
+		if (this->name != nullptr) {
+			delete[] this->name;
+			this->name = nullptr;
+		}
+		if (other.name != nullptr) {
+			size_t len = strlen(other.name) + 1;
+			this->name = new char[len];
+			strcpy_s(this->name, len, other.name);
+		}
+		else {
+			this->name = nullptr;
+		}
+		return *this;
+	}
+
+	vector2_t& operator =(vector2_t&& other) noexcept {
+		if (this == &other) return *this;
+		this->x = other.x;
+		this->y = other.y;
+		if (this->name != nullptr) {
+			delete[] this->name;
+		}
+		this->name = other.name;
+		other.name = nullptr;
+		return *this;
+	}
+
+	void operator += (const vector2_t& other) {
+		this->x += other.x;
+		this->y += other.y;
+	}
+
+	void operator += (T n) {
+		this->x += n;
+		this->y += n;
+	}
+
+	void operator -= (const vector2_t& other) {
+		this->x -= other.x;
+		this->y -= other.y;
+	}
+
+	void operator -= (T n) {
+		this->x -= n;
+		this->y -= n;
+	}
+};
+
+template<typename T>
+vector2_t<T> operator -(const vector2_t<T>& v) {
+	return vector2_t<T>(-v.get_x(), -v.get_y());
+}
+
+template<typename T>
+vector2_t<T> operator *(const vector2_t<T>& v, T n) {
+	return vector2_t<T>(v.get_x() * n, v.get_y() * n);
+}
+
+template<typename T>
+vector2_t<T> operator *(T n, const vector2_t<T>& v) {
+	return vector2_t<T>(v.get_x() * n, v.get_y() * n);
+}
+
+template<typename T>
+vector2_t<T> operator /(const vector2_t<T>& v, T n) {
+	return vector2_t<T>(v.get_x() / n, v.get_y() / n);
+}
+
+template<typename T>
+std::ostream& operator <<(std::ostream& out, const vector2_t<T>& v) {
+	out << v.to_string();
+	return out;
+}
